@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,10 +64,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameCellController.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Commands\ClickCommand.cs" />
-    <Compile Include="Models\Field.cs" />
-    <Compile Include="GameController.cs" />
+    <Compile Include="Models\GameBoard.cs" />
+    <Compile Include="GameBoardController.cs" />
+    <Compile Include="Models\GameConfiguration.cs" />
+    <Compile Include="Services\GameConfigurationService.cs" />
+    <Compile Include="Services\IGameConfigurationService.cs" />
     <Compile Include="VisualHost.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

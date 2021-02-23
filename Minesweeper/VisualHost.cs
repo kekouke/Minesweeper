@@ -19,19 +19,16 @@ namespace Minesweeper
             _children = new VisualCollection(this);
         }
 
-        public void Invalidate(Field field)
+        public void Invalidate(GameCellController[,] gameCellController)
         {
             _children.Clear();
 
             var drawingVisual = new DrawingVisual();
             using (DrawingContext context = drawingVisual.RenderOpen())
             {
-                for (int i = 0; i < field.Cols; i++)
+                foreach (var cellController in gameCellController)
                 {
-                    for (int j = 0; j < field.Rows; j++)
-                    {
-                        field[i][j].Draw(context);
-                    }
+                    cellController.Draw(context);
                 }
             }
 

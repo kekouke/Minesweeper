@@ -20,18 +20,19 @@ namespace Minesweeper
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly GameController _controller;
+        private readonly GameBoardController _boardController;
         public MainWindow()
         {
             InitializeComponent();
             Canvas.Children.Add(new VisualHost());
-            _controller = new GameController(Canvas.Children[0] as VisualHost);
-            DataContext = _controller;
+            
+            _boardController = new GameBoardController(Canvas.Children[0] as VisualHost);
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _controller.HandleCellClick(e.GetPosition(sender as Canvas));
+            _boardController.HandleCellClick(e.GetPosition(sender as Canvas));
         }
+        
     }
 }

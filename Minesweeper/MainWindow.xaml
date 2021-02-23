@@ -7,23 +7,32 @@
         mc:Ignorable="d"
         Title="Minesweeper" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.05*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.4*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.4*"/>
-        </Grid.ColumnDefinitions>
-
-        <Menu Grid.Row="0">
-            <MenuItem Header="Restart" Command="{Binding RestartGameCommand}"></MenuItem>
-        </Menu>
+        <!--<Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.05*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Menu Grid.Row="0">
+                <MenuItem Header="Restart" Command="{Binding RestartGameCommand}"></MenuItem>
+            </Menu>
+        </Grid>-->
         
-        <Frame Grid.Column="0" Grid.Row="1" Background="Aqua"></Frame>
-        <Canvas Grid.Column="1" Grid.Row="1" x:Name="Canvas" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
-        </Canvas>
-        <Frame Grid.Column="2" Grid.Row="1" Background="Aqua"></Frame>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.4*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Frame Grid.Column="0" Grid.Row="1" Background="Aqua"></Frame>
+            <Canvas Grid.Column="1"
+                    Grid.Row="1"
+                    x:Name="Canvas"
+                    MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
+                    Background="Chartreuse">
+            </Canvas>
+            <Frame Grid.Column="2" Grid.Row="1" Background="Aqua"></Frame>
+        </Grid>
     </Grid>
 </Window>
