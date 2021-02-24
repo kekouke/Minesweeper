@@ -2,6 +2,7 @@
 using Minesweeper.Commands;
 using System.Windows;
 using System.Windows.Input;
+using Minesweeper.Enums;
 using Minesweeper.Models;
 using Minesweeper.Services;
 
@@ -9,12 +10,14 @@ namespace Minesweeper
 {
     public class GameBoardController
     {
-        public ICommand RestartGameCommand { get; set; }
+        public ICommand RestartGameCommand { get; }
         
         private readonly VisualHost Canvas;
 
         private GameCellController[,] _gameCellControllers;
         private GameBoard _gameBoard { get; set; }
+        
+        private Size cellSize;
         
         private Point ViewPort { get; }
 
@@ -23,10 +26,14 @@ namespace Minesweeper
         {
             // TODO Start
 
+
+            
             var _configService = new GameConfigurationService();
-            _gameBoard = new GameBoard(_configService.GetBeginnerConfig);
+            _gameBoard = new GameBoard(_configService.GetAdvancedConfig);
 
             ViewPort = new Point(435, 411);
+            cellSize = new Size(ViewPort.X / _gameBoard.Cols,
+                ViewPort.Y / _gameBoard.Rows);
             
             InitializeCells();
             
@@ -40,9 +47,6 @@ namespace Minesweeper
 
         private void InitializeCells()
         {
-            var cellSize = new Size(ViewPort.X / _gameBoard.Cols,
-                ViewPort.Y / _gameBoard.Rows);
-                
             _gameCellControllers = new GameCellController[_gameBoard.Cols, _gameBoard.Rows];
 
             for (int x = 0; x < _gameBoard.Cols; x++)
@@ -71,27 +75,28 @@ namespace Minesweeper
             
             Invalidate();
         }
-
-        public void HandleCellClick(Point point) //TODO (Index out of rabge)
+        
+        public void HandleCellClick(Point point) 
         {
-            var cellSize = new Size(ViewPort.X / _gameBoard.Cols,
-                ViewPort.Y / _gameBoard.Rows);
+            var x = (int) Math.Floor(point.X / cellSize.Width);
+            var y = (int) Math.Floor(point.Y / cellSize.Height);
             
-            int x = (int)Math.Floor(point.X / cellSize.Width);
-            int y = (int)Math.Floor(point.Y / cellSize.Height);
+            var cell = _gameBoard.GetCellByCoord(x, y);
+            if (cell == null)
+                return;
 
-            if (_gameBoard.GetCellByCoord(x, y).IsBomb)
+            switch (cell.Type)
             {
-                _gameBoard.ForEach(c => c.Reveal());
+                case CellType.Free:
+                    _gameBoard.Reveal(x, y);
+                    break;
+                case CellType.Neighboor:
+                    cell.Reveal();
+                    break;
+                case CellType.Mine:
+                    _gameBoard.ForEach(c => c.Reveal());
+                    break;
             }
-            else
-            {
-                // TODO
-                _gameBoard.GetCellByCoord(x, y).Reveal(); // Field.BFS(x, y);
-                _gameBoard.Reveal(x, y);
-            }
-
-            Invalidate();
         }
     }
 }

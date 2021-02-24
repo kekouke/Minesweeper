@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
+using Minesweeper.Enums;
 
 namespace Minesweeper.Models
 {
     public class GameBoard
     {
-
         private readonly GameConfiguration _gameConfiguration;
         
         private Cell[,] _cells;
@@ -18,33 +17,46 @@ namespace Minesweeper.Models
             Cols = gameConfiguration.Weight;
             Rows = gameConfiguration.Height;
             
-            GenerateField();
+            InitializeField();
             CountNeighbors();
         }
 
         public int Cols { get; }
         public int Rows { get; }
-
-        /*
-         * Изменить метод генерации поля, так как текущий метод не учитывает сколько
-         * бомб необходимо установить с текущей конфигурацией игры
-         */
-        private void GenerateField()
+        
+        private void InitializeField()
         {
             var rnd = new Random();
+            
             _cells = new Cell[_gameConfiguration.Weight, _gameConfiguration.Height];
 
             for (int i = 0; i < _gameConfiguration.Weight; i++)
             {
                 for (int j = 0; j < _gameConfiguration.Height; j++)
                 {
-                    var isEnemy = rnd.NextDouble() <= 0.2;
-                    _cells[i, j] = new Cell(new Point(i, j), isEnemy);
+                    _cells[i, j] = new Cell(new Point(i, j), CellType.Free);
                 }
+            }
+            
+            int minesCount = _gameConfiguration.MinesCount;
+
+            while (minesCount > 0)
+            {
+                int x = rnd.Next() % Cols;
+                int y = rnd.Next() % Rows;
+
+                var cell = GetCellByCoord(x, y);
+                
+                if (cell.Type == CellType.Mine)
+                    continue;
+
+                cell.Type = CellType.Mine;
+                minesCount--;
+
             }
         }
 
-        public void CountNeighbors() => ForEach(x => CountNeighbors(x));
+        private void CountNeighbors() => ForEach(x => CountNeighbors(x));
 
         public void ForEach(Action<Cell> action)
         {
@@ -60,7 +72,7 @@ namespace Minesweeper.Models
         // TODO
         public void Reveal(int x, int y)
         {
-            Queue<Cell> q = new Queue<Cell>();
+            var q = new Queue<Cell>();
             q.Enqueue(_cells[x, y]);
 
             while (q.Count != 0)
@@ -95,10 +107,8 @@ namespace Minesweeper.Models
 
         private void CountNeighbors(Cell cell)
         {
-            if (cell.IsBomb)
-            {
+            if (cell.Type == CellType.Mine)
                 return;
-            }
 
             for (int xoff = -1; xoff <= 1; xoff++)
             {
@@ -107,19 +117,27 @@ namespace Minesweeper.Models
                     var x = (int) cell.Coordinates.X + xoff;
                     var y = (int) cell.Coordinates.Y + yoff;
 
-                    if (x > -1 && x < Cols && y > -1 && y < Rows)
+                    if (GetCellByCoord(x, y) != null)
                     {
-                        if (_cells[x, y].IsBomb)
+                        if (_cells[x, y].Type == CellType.Mine)
                         {
                             cell.CountNeighboors += 1;
                         }
                     }
                 }
             }
+
+            if (cell.CountNeighboors > 0)
+            {
+                cell.Type = CellType.Neighboor;
+            }
         }
 
         public Cell GetCellByCoord(int x_coord, int y_coord)
         {
+            if (x_coord < 0 || x_coord >= Cols || y_coord < 0 || y_coord >= Rows)
+                return null;
+            
             return _cells[x_coord, y_coord];
         }
     }

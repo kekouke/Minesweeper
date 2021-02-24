@@ -32,6 +32,7 @@ namespace Minesweeper
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _boardController.HandleCellClick(e.GetPosition(sender as Canvas));
+            _boardController.Invalidate();
         }
         
     }
