@@ -1,20 +1,20 @@
 ﻿using System;
-using Minesweeper.Commands;
 using System.Windows;
 using System.Windows.Input;
+using Minesweeper.Commands;
 using Minesweeper.Enums;
 using Minesweeper.Models;
 using Minesweeper.Services;
 
-namespace Minesweeper
+namespace Minesweeper.ViewModels
 {
-    public class GameBoardController
+    public class GameBoardViewModel
     {
         public ICommand RestartGameCommand { get; }
         
-        private readonly VisualHost Canvas;
+        private VisualHost Canvas;
 
-        private GameCellController[,] _gameCellControllers;
+        private GameCellViewModel[,] _gameCellViewModels;
         private GameBoard _gameBoard { get; set; }
         
         private Size cellSize;
@@ -22,7 +22,7 @@ namespace Minesweeper
         private Point ViewPort { get; }
 
         // TODO: Make interface instead of VisualHost
-        public GameBoardController(VisualHost canvas)
+        public GameBoardViewModel(VisualHost canvas)
         {
             // TODO Start
 
@@ -47,27 +47,27 @@ namespace Minesweeper
 
         private void InitializeCells()
         {
-            _gameCellControllers = new GameCellController[_gameBoard.Cols, _gameBoard.Rows];
+            _gameCellViewModels = new GameCellViewModel[_gameBoard.Cols, _gameBoard.Rows];
 
             for (int x = 0; x < _gameBoard.Cols; x++)
             {
                 for (int y = 0; y < _gameBoard.Rows; y++)
                 {
                     var cell = _gameBoard.GetCellByCoord(x, y);
-                    var controller = new GameCellController(cell, cellSize);
-                    _gameCellControllers[(int)cell.Coordinates.X, (int)cell.Coordinates.Y] = controller;
+                    var controller = new GameCellViewModel(cell, cellSize);
+                    _gameCellViewModels[(int)cell.Coordinates.X, (int)cell.Coordinates.Y] = controller;
                 }
             }
         }
 
-        public void Invalidate() => Canvas.Invalidate(_gameCellControllers);
+        public void Invalidate() => Canvas.Invalidate(_gameCellViewModels);
         
         private void Restart()
         {
             // TODO Start
 
             var _configService = new GameConfigurationService();
-            _gameBoard = new GameBoard(_configService.GetBeginnerConfig);
+            _gameBoard = new GameBoard(_configService.GetAdvancedConfig);
             
             InitializeCells();
             
@@ -96,6 +96,14 @@ namespace Minesweeper
                 case CellType.Mine:
                     _gameBoard.ForEach(c => c.Reveal());
                     break;
+            }
+        }
+
+        public void Initialize(object visualHost)
+        {
+            if (visualHost != null)
+            {
+                Canvas = visualHost as VisualHost;
             }
         }
     }

@@ -1,17 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using Minesweeper.Views;
+using Minesweeper.ViewModels;
+using Prism.Ioc;
+using Prism.Unity;
 
 namespace Minesweeper
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : PrismApplication
     {
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.Register<VisualHost>();
+        }
+
+        protected override Window CreateShell()
+        {
+            var window = Container.Resolve<MainWindow>();
+
+            window.DataContext = Container.Resolve<MainWindowViewModel>();
+
+            return window;
+        }
     }
 }

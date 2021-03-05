@@ -6,7 +6,7 @@ using Minesweeper.Models;
 
 namespace Minesweeper
 {
-    public class GameCellController
+    public class GameCellViewModel
     {
         private Cell _cell;
         
@@ -16,7 +16,7 @@ namespace Minesweeper
         
         private Size Size { get; }
         
-        public GameCellController(Cell cell, Size size)
+        public GameCellViewModel(Cell cell, Size size)
         {
             _cell = cell;
             /////////////
