@@ -98,8 +98,8 @@
     </Compile>
     <Compile Include="Enums\CellType.cs" />
     <Compile Include="Enums\GameState.cs" />
+    <Compile Include="Events\RestartGameEvent.cs" />
     <Compile Include="Models\Cell.cs" />
-    <Compile Include="Commands\ClickCommand.cs" />
     <Compile Include="Models\GameBoard.cs" />
     <Compile Include="Models\GameConfiguration.cs" />
     <Compile Include="Services\GameConfigurationService.cs" />
@@ -143,6 +143,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

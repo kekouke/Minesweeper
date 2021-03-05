@@ -1,18 +1,28 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using Minesweeper.Commands;
 using Minesweeper.Enums;
+using Minesweeper.Events;
 using Minesweeper.Models;
 using Minesweeper.Services;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Mvvm;
 
 namespace Minesweeper.ViewModels
 {
-    public class GameBoardViewModel
+    public class GameBoardViewModel : BindableBase
     {
-        public ICommand RestartGameCommand { get; }
-        
-        private VisualHost Canvas;
+        private VisualHost _canvas;
+        public VisualHost Canvas 
+        { 
+            get => _canvas; 
+            set
+            {
+                _canvas = value;
+                RaisePropertyChanged();
+            } 
+        }
 
         private GameCellViewModel[,] _gameCellViewModels;
         private GameBoard _gameBoard { get; set; }
@@ -22,12 +32,12 @@ namespace Minesweeper.ViewModels
         private Point ViewPort { get; }
 
         // TODO: Make interface instead of VisualHost
-        public GameBoardViewModel(VisualHost canvas)
+        public GameBoardViewModel(IEventAggregator eventAggregator)
         {
+            eventAggregator.GetEvent<RestartGameEvent>().Subscribe(Restart);
+            
             // TODO Start
 
-
-            
             var _configService = new GameConfigurationService();
             _gameBoard = new GameBoard(_configService.GetAdvancedConfig);
 
@@ -36,11 +46,10 @@ namespace Minesweeper.ViewModels
                 ViewPort.Y / _gameBoard.Rows);
             
             InitializeCells();
-            
+
             // TODO End
 
-            RestartGameCommand = new ClickCommand(Restart);
-            Canvas = canvas;
+            Canvas = new VisualHost(); //canvas;
 
             Invalidate();
         }

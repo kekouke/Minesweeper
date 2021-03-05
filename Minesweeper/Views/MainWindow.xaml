@@ -25,10 +25,11 @@
                 <MenuItem Header="Restart" Command="{Binding RestartGameCommand}"/>
                 <MenuItem Header="About" />
             </Menu>
+            
             <local:GameBoardView Grid.Row="1"
-                                 Grid.Column="1">
-                
-            </local:GameBoardView>
+                                 Grid.Column="1"/>
+
+
             <Frame Grid.Column="0" Grid.Row="1" Background="Aqua"></Frame>
             <Frame Grid.Column="2" Grid.Row="1" Background="Aqua"/>
         </Grid>

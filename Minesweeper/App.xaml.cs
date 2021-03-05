@@ -13,7 +13,6 @@ namespace Minesweeper
     {
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<VisualHost>();
         }
 
         protected override Window CreateShell()

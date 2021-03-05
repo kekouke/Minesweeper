@@ -1,7 +1,8 @@
-﻿namespace Minesweeper.Events
+﻿using Prism.Events;
+
+namespace Minesweeper.Events
 {
-    public class RestartGameEvent
+    public class RestartGameEvent : PubSubEvent
     {
-        
     }
 }
