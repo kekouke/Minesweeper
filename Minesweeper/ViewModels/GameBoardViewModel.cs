@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Input;
 using Minesweeper.Enums;
 using Minesweeper.Events;
 using Minesweeper.Models;
 using Minesweeper.Services;
-using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 
@@ -13,8 +11,8 @@ namespace Minesweeper.ViewModels
 {
     public class GameBoardViewModel : BindableBase
     {
-        private VisualHost _canvas;
-        public VisualHost Canvas 
+        private IDrawable _canvas;
+        public IDrawable Canvas 
         { 
             get => _canvas; 
             set
@@ -31,8 +29,7 @@ namespace Minesweeper.ViewModels
         
         private Point ViewPort { get; }
 
-        // TODO: Make interface instead of VisualHost
-        public GameBoardViewModel(IEventAggregator eventAggregator)
+        public GameBoardViewModel(IEventAggregator eventAggregator, IDrawable visualHost)
         {
             eventAggregator.GetEvent<RestartGameEvent>().Subscribe(Restart);
             
@@ -46,10 +43,11 @@ namespace Minesweeper.ViewModels
                 ViewPort.Y / _gameBoard.Rows);
             
             InitializeCells();
+            new EventAggregator();
 
             // TODO End
 
-            Canvas = new VisualHost(); //canvas;
+            Canvas = visualHost;
 
             Invalidate();
         }

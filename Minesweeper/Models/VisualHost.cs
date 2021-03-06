@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Minesweeper
+namespace Minesweeper.Models
 {
-    public class VisualHost : FrameworkElement
+    public class VisualHost : FrameworkElement, IDrawable
     {
         private VisualCollection _children;
         protected override int VisualChildrenCount => _children.Count;

@@ -3,6 +3,7 @@ using Minesweeper.Views;
 using Minesweeper.ViewModels;
 using Prism.Ioc;
 using Prism.Unity;
+using Minesweeper.Models;
 
 namespace Minesweeper
 {
@@ -13,6 +14,7 @@ namespace Minesweeper
     {
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<IDrawable, VisualHost>();
         }
 
         protected override Window CreateShell()

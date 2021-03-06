@@ -13,13 +13,10 @@ namespace Minesweeper.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly IEventAggregator _eventAggregator;
-        
-        public DelegateCommand RestartGameCommand { get; private set; }
-        
+
         public MainWindowViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            RestartGameCommand = new DelegateCommand(RestartGame);
         }
 
         private void RestartGame()

@@ -20,11 +20,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <Menu Grid.Row="0">
-                <MenuItem Header="Levels" />
-                <MenuItem Header="Restart" Command="{Binding RestartGameCommand}"/>
-                <MenuItem Header="About" />
-            </Menu>
+            <local:GameMenuView Grid.Row="0" />
             
             <local:GameBoardView Grid.Row="1"
                                  Grid.Column="1"/>
