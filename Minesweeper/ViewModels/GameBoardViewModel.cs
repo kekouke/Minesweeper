@@ -11,6 +11,11 @@ namespace Minesweeper.ViewModels
 {
     public class GameBoardViewModel : BindableBase
     {
+        public double BoardHeight { get; set; }
+        public double BoardWidth { get; set; }
+
+        private GameConfiguration currentConfig = Settings.DefaultGameConfig;
+        
         private IDrawable _canvas;
         public IDrawable Canvas 
         { 
@@ -24,44 +29,45 @@ namespace Minesweeper.ViewModels
 
         private GameCellViewModel[,] _gameCellViewModels;
         private GameBoard _gameBoard { get; set; }
-        
-        private Size cellSize;
-        
-        private Point ViewPort { get; }
 
         public GameBoardViewModel(IEventAggregator eventAggregator, IDrawable visualHost)
         {
             eventAggregator.GetEvent<RestartGameEvent>().Subscribe(Restart);
+            eventAggregator.GetEvent<ChangeGameConfigEvent>().Subscribe(ChangeWorld);
             
-            // TODO Start
-
-            var _configService = new GameConfigurationService();
-            _gameBoard = new GameBoard(_configService.GetAdvancedConfig);
-
-            ViewPort = new Point(435, 411);
-            cellSize = new Size(ViewPort.X / _gameBoard.Cols,
-                ViewPort.Y / _gameBoard.Rows);
-            
-            InitializeCells();
-            new EventAggregator();
-
-            // TODO End
-
             Canvas = visualHost;
-
+            
+            ChangeWorld(Settings.DefaultGameConfig);
+            InitializeCells();
             Invalidate();
+        }
+
+        private void ChangeWorld(GameConfiguration config)
+        {
+            currentConfig = config;
+            Restart();
         }
 
         private void InitializeCells()
         {
             _gameCellViewModels = new GameCellViewModel[_gameBoard.Cols, _gameBoard.Rows];
+            
+            // Start TODO
+            
+            BoardHeight = Settings.CellSize.Height * _gameBoard.Cols;
+            BoardWidth = Settings.CellSize.Width * _gameBoard.Rows;
+            
+            RaisePropertyChanged("BoardHeight");
+            RaisePropertyChanged("BoardWidth");
 
+            // End TODO
+            
             for (int x = 0; x < _gameBoard.Cols; x++)
             {
                 for (int y = 0; y < _gameBoard.Rows; y++)
                 {
                     var cell = _gameBoard.GetCellByCoord(x, y);
-                    var controller = new GameCellViewModel(cell, cellSize);
+                    var controller = new GameCellViewModel(cell, Settings.CellSize);
                     _gameCellViewModels[(int)cell.Coordinates.X, (int)cell.Coordinates.Y] = controller;
                 }
             }
@@ -71,22 +77,15 @@ namespace Minesweeper.ViewModels
         
         private void Restart()
         {
-            // TODO Start
-
-            var _configService = new GameConfigurationService();
-            _gameBoard = new GameBoard(_configService.GetAdvancedConfig);
-            
+            _gameBoard = new GameBoard(currentConfig);
             InitializeCells();
-            
-            // TODO End
-            
             Invalidate();
         }
         
         public void HandleCellClick(Point point) 
         {
-            var x = (int) Math.Floor(point.X / cellSize.Width);
-            var y = (int) Math.Floor(point.Y / cellSize.Height);
+            var x = (int) Math.Floor(point.X / Settings.CellSize.Width);
+            var y = (int) Math.Floor(point.Y / Settings.CellSize.Height);
             
             var cell = _gameBoard.GetCellByCoord(x, y);
             if (cell == null)
@@ -103,14 +102,6 @@ namespace Minesweeper.ViewModels
                 case CellType.Mine:
                     _gameBoard.ForEach(c => c.Reveal());
                     break;
-            }
-        }
-
-        public void Initialize(object visualHost)
-        {
-            if (visualHost != null)
-            {
-                Canvas = visualHost as VisualHost;
             }
         }
     }

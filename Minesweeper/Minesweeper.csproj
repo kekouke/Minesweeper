@@ -87,6 +87,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\ChangeGameConfigEvent.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\GameMenuViewModel.cs" />
     <Compile Include="Views\GameMenuView.xaml.cs">
       <DependentUpon>GameMenuView.xaml</DependentUpon>

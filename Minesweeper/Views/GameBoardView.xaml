@@ -5,6 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:prism="http://prismlibrary.com/"
       prism:ViewModelLocator.AutoWireViewModel="True"
+      Width="{Binding BoardWidth}"
+      Height="{Binding BoardHeight}"
       mc:Ignorable="d">
     <Grid>
         <ContentControl Content="{Binding Canvas}"

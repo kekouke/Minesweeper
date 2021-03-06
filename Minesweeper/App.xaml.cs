@@ -4,17 +4,16 @@ using Minesweeper.ViewModels;
 using Prism.Ioc;
 using Prism.Unity;
 using Minesweeper.Models;
+using Minesweeper.Services;
 
 namespace Minesweeper
 {
-    /// <summary>
-    /// Логика взаимодействия для App.xaml
-    /// </summary>
     public partial class App : PrismApplication
     {
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IDrawable, VisualHost>();
+            containerRegistry.Register<IGameConfigurationService, GameConfigurationService>();
         }
 
         protected override Window CreateShell()

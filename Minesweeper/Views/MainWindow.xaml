@@ -6,28 +6,25 @@
         xmlns:local="clr-namespace:Minesweeper.Views"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Minesweeper" Height="450" Width="800">
+        Width="Auto"
+        Height="Auto"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        Title="Minesweeper" >
     <Grid>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.4*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="0.4*"/>
-            </Grid.ColumnDefinitions>
-            
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.05*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <local:GameMenuView Grid.Row="0" />
+            <local:GameMenuView Grid.RowSpan="1" />
             
             <local:GameBoardView Grid.Row="1"
-                                 Grid.Column="1"/>
-
-
-            <Frame Grid.Column="0" Grid.Row="1" Background="Aqua"></Frame>
-            <Frame Grid.Column="2" Grid.Row="1" Background="Aqua"/>
+                                 Grid.Column="1"
+                                 Background="Chartreuse"
+                                 />
+            <!--Height="450" Width="800"-->
         </Grid>
     </Grid>
 </Window>
