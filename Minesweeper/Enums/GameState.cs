@@ -2,6 +2,8 @@
 {
     public enum GameState
     {
-
+        Initial,
+        InProcess,
+        GameOver
     }
 }

@@ -12,19 +12,26 @@
         WindowStartupLocation="CenterScreen"
         Title="Minesweeper" >
     <Grid>
-        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <local:GameMenuView Grid.RowSpan="1" />
+        </Grid>
+
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.05*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <local:GameMenuView Grid.RowSpan="1" />
-            
+
+            <local:TimerView/>
+
             <local:GameBoardView Grid.Row="1"
                                  Grid.Column="1"
-                                 Background="Chartreuse"
-                                 />
-            <!--Height="450" Width="800"-->
+                                 Background="Chartreuse" />
         </Grid>
     </Grid>
 </Window>

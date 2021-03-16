@@ -1,4 +1,6 @@
-﻿using Minesweeper.Events;
+﻿using System.Windows;
+using Minesweeper.Events;
+using Minesweeper.Models;
 using Minesweeper.Services;
 using Prism.Commands;
 using Prism.Events;
@@ -12,7 +14,11 @@ namespace Minesweeper.ViewModels
         private IGameConfigurationService _configService;
         
         public DelegateCommand RestartGameCommand { get; }
-        public DelegateCommand<string> ChangeGameConfigCommand { get; }
+        
+        public DelegateCommand BeginnerNewGameCommand { get; }
+        public DelegateCommand AdvancedNewGameCommand { get; }
+        public DelegateCommand ExpertNewGameCommand { get; }
+
 
         public GameMenuViewModel(IEventAggregator eventAggregator, IGameConfigurationService configSrvice)
         {
@@ -20,34 +26,23 @@ namespace Minesweeper.ViewModels
             _configService = configSrvice;
             
             RestartGameCommand = new DelegateCommand(RestartGame);
-            ChangeGameConfigCommand = new DelegateCommand<string>(ChangeGameConfig);
+            
+            BeginnerNewGameCommand = new DelegateCommand(() 
+                => StartNewGame(_configService.GetBeginnerConfig));
+            
+            AdvancedNewGameCommand = new DelegateCommand(() 
+                => StartNewGame(_configService.GetAdvancedConfig));
+            
+            ExpertNewGameCommand = new DelegateCommand(() 
+                => StartNewGame(_configService.GetExpertConfig));
         }
 
-        private void ChangeGameConfig(string configName)
-        {
-            var configGame = Settings.DefaultGameConfig;
-            
-            if (configName == "Beginner")
-            {
-                 configGame = _configService.GetBeginnerConfig;
-            }
+        private void StartNewGame(GameConfiguration configuration) =>
+            _eventAggregator.GetEvent<ChangeGameConfigEvent>().Publish(configuration);
 
-            if (configName == "Advanced")
-            {
-                 configGame = _configService.GetAdvancedConfig;
-            }
 
-            if (configName == "Expert")
-            {
-                 configGame = _configService.GetExpertConfig;
-            }
-            
-            _eventAggregator.GetEvent<ChangeGameConfigEvent>().Publish(configGame);
-        }
-
-        private void RestartGame()
-        {
+        private void RestartGame() =>
             _eventAggregator.GetEvent<RestartGameEvent>().Publish();
-        }
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Minesweeper.Events
 {
-    public class GameOverEvent : PubSubEvent
+    public class FirstCellClickEvent : PubSubEvent
     {
     }
 }

@@ -11,12 +11,9 @@
     <Grid>
         <Menu VerticalAlignment="Stretch">
             <MenuItem Header="Levels">
-                <MenuItem Header="Beginner" Command="{Binding ChangeGameConfigCommand}"
-                          CommandParameter="Beginner"/>
-                <MenuItem Header="Advanced" Command="{Binding ChangeGameConfigCommand}"
-                          CommandParameter="Advanced"/>
-                <MenuItem Header="Expert" Command="{Binding ChangeGameConfigCommand}"
-                          CommandParameter="Expert"/> 
+                <MenuItem Header="Beginner" Command="{Binding BeginnerNewGameCommand}"/>
+                <MenuItem Header="Advanced" Command="{Binding AdvancedNewGameCommand}"/>
+                <MenuItem Header="Expert" Command="{Binding ExpertNewGameCommand}"/> 
             </MenuItem>
             <MenuItem Header="Restart" Command="{Binding RestartGameCommand}"/>
             <MenuItem Header="About" />

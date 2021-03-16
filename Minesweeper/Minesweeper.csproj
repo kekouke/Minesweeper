@@ -88,10 +88,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Events\ChangeGameConfigEvent.cs" />
+    <Compile Include="Events\FirstCellClickEvent.cs" />
+    <Compile Include="Events\GameOverEvent.cs" />
+    <Compile Include="Events\StartNewGameEvent.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\GameMenuViewModel.cs" />
+    <Compile Include="ViewModels\TimerViewModel.cs" />
     <Compile Include="Views\GameMenuView.xaml.cs">
       <DependentUpon>GameMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TimerView.xaml.cs">
+      <DependentUpon>TimerView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\GameBoardView.xaml" />
     <Page Include="Views\MainWindow.xaml">
@@ -123,6 +130,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\GameMenuView.xaml" />
+    <Page Include="Views\TimerView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

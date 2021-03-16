@@ -14,6 +14,8 @@ namespace Minesweeper.ViewModels
         public double BoardHeight { get; set; }
         public double BoardWidth { get; set; }
 
+
+        private GameState _gameState;
         private GameConfiguration currentConfig = Settings.DefaultGameConfig;
         
         private IDrawable _canvas;
@@ -28,28 +30,35 @@ namespace Minesweeper.ViewModels
         }
 
         private GameCellViewModel[,] _gameCellViewModels;
+        private IEventAggregator _eventAggregator;
         private GameBoard _gameBoard { get; set; }
 
         public GameBoardViewModel(IEventAggregator eventAggregator, IDrawable visualHost)
         {
-            eventAggregator.GetEvent<RestartGameEvent>().Subscribe(Restart);
-            eventAggregator.GetEvent<ChangeGameConfigEvent>().Subscribe(ChangeWorld);
-            
+            eventAggregator.GetEvent<RestartGameEvent>().Subscribe(() => StartNewGame(currentConfig));
+            eventAggregator.GetEvent<ChangeGameConfigEvent>().Subscribe(StartNewGame);
+
+            _eventAggregator = eventAggregator;
             Canvas = visualHost;
-            
-            ChangeWorld(Settings.DefaultGameConfig);
-            InitializeCells();
-            Invalidate();
+
+            StartNewGame(Settings.DefaultGameConfig);
         }
 
-        private void ChangeWorld(GameConfiguration config)
+        private void StartNewGame(GameConfiguration configuration)
         {
-            currentConfig = config;
-            Restart();
+            currentConfig = configuration;
+
+            InitializeCells();
+            Invalidate();
+
+            _gameState = GameState.Initial;
+
+            _eventAggregator.GetEvent<StartNewGameEvent>().Publish();
         }
 
         private void InitializeCells()
         {
+            _gameBoard = new GameBoard(currentConfig);
             _gameCellViewModels = new GameCellViewModel[_gameBoard.Cols, _gameBoard.Rows];
             
             // Start TODO
@@ -75,15 +84,17 @@ namespace Minesweeper.ViewModels
 
         public void Invalidate() => Canvas.Invalidate(_gameCellViewModels);
         
-        private void Restart()
+        public void HandleCellClick(Point point)
         {
-            _gameBoard = new GameBoard(currentConfig);
-            InitializeCells();
-            Invalidate();
-        }
-        
-        public void HandleCellClick(Point point) 
-        {
+            if (_gameState == GameState.GameOver)
+                return;
+
+            if (_gameState == GameState.Initial)
+            {
+                _gameState = GameState.InProcess;
+                _eventAggregator.GetEvent<FirstCellClickEvent>().Publish();
+            }
+            
             var x = (int) Math.Floor(point.X / Settings.CellSize.Width);
             var y = (int) Math.Floor(point.Y / Settings.CellSize.Height);
             
@@ -101,6 +112,8 @@ namespace Minesweeper.ViewModels
                     break;
                 case CellType.Mine:
                     _gameBoard.ForEach(c => c.Reveal());
+                    _gameState = GameState.GameOver;
+                    _eventAggregator.GetEvent<GameOverEvent>().Publish();
                     break;
             }
         }
