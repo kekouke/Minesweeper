@@ -16,6 +16,7 @@
                 <MenuItem Header="Expert" Command="{Binding ExpertNewGameCommand}"/> 
             </MenuItem>
             <MenuItem Header="Restart" Command="{Binding RestartGameCommand}"/>
+            <MenuItem Header="Leaderboad"/>
             <MenuItem Header="About" />
         </Menu>
     </Grid>

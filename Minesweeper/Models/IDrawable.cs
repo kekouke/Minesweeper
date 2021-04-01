@@ -8,6 +8,6 @@ namespace Minesweeper.Models
 {
     public interface IDrawable
     {
-        void Invalidate(GameCellViewModel[,] context);
+        void Draw(GameCellViewModel[,] context);
     }
 }

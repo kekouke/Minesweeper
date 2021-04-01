@@ -80,7 +80,7 @@ namespace Minesweeper.Models
                 var cell = q.Dequeue();
                 cell.Reveal();
 
-                if (cell.CountNeighboors == 0)
+                if (cell.Type == CellType.Free)
                 {
                     for (int xoff = -1; xoff <= 1; xoff++)
                     {

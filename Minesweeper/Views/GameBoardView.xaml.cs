@@ -1,8 +1,6 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 using Minesweeper.ViewModels;
-using Prism.Events;
 
 namespace Minesweeper.Views
 {
@@ -13,13 +11,23 @@ namespace Minesweeper.Views
             InitializeComponent();
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void OnLeftMouseButtonClicked(object sender, MouseButtonEventArgs e)
         {
             if (sender as ContentControl == null) return;
 
             var viewModel = DataContext as GameBoardViewModel;
 
-            viewModel?.HandleCellClick(e.GetPosition(sender as ContentControl));
+            viewModel?.HandleCellClick(e.GetPosition(sender as ContentControl), 0);
+            viewModel?.Invalidate();
+        }
+
+        private void OnRightMouseButtonClicked(object sender, MouseButtonEventArgs e)
+        {
+            if (sender as ContentControl == null) return;
+
+            var viewModel = DataContext as GameBoardViewModel;
+            
+            viewModel?.HandleCellClick(e.GetPosition(sender as ContentControl), 1);
             viewModel?.Invalidate();
         }
     }

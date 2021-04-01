@@ -42,6 +42,10 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Prism, Version=8.0.0.1909, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.8.0.0.1909\lib\net47\Prism.dll</HintPath>
     </Reference>
@@ -87,10 +91,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\CellFlagEvent.cs" />
     <Compile Include="Events\ChangeGameConfigEvent.cs" />
     <Compile Include="Events\FirstCellClickEvent.cs" />
     <Compile Include="Events\GameOverEvent.cs" />
     <Compile Include="Events\StartNewGameEvent.cs" />
+    <Compile Include="Models\GameStats.cs" />
+    <Compile Include="Services\ILeaderboardService.cs" />
+    <Compile Include="Services\LeaderboardService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\GameMenuViewModel.cs" />
     <Compile Include="ViewModels\TimerViewModel.cs" />

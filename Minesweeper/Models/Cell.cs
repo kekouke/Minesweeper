@@ -12,6 +12,7 @@ namespace Minesweeper.Models
         public int CountNeighboors { get; set; }
 
         public bool IsRevealed { get; set; }
+        public bool IsFlagged { get; set; }
 
         public Cell(Point position, CellType cellType)
         {
@@ -19,6 +20,15 @@ namespace Minesweeper.Models
             Coordinates = position;
         }
 
-        public void Reveal() => IsRevealed = true;
+        public void Reveal()
+        {
+            if (!IsFlagged)
+                IsRevealed = true;
+        }
+
+        public void SetFlag()
+        {
+            IsFlagged = !IsFlagged;
+        }
     }
 }

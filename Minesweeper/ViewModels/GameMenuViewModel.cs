@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using Minesweeper.Events;
+﻿using Minesweeper.Events;
 using Minesweeper.Models;
 using Minesweeper.Services;
 using Prism.Commands;

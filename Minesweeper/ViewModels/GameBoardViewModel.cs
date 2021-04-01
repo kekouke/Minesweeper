@@ -11,8 +11,27 @@ namespace Minesweeper.ViewModels
 {
     public class GameBoardViewModel : BindableBase
     {
-        public double BoardHeight { get; set; }
-        public double BoardWidth { get; set; }
+        private double _boardHeight;
+        public double BoardHeight
+        {
+            get => _boardHeight;
+            set
+            {
+                _boardHeight = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _boardWidth;
+        public double BoardWidth 
+        {
+            get => _boardWidth;
+            set
+            {
+                _boardWidth = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         private GameState _gameState;
@@ -61,15 +80,8 @@ namespace Minesweeper.ViewModels
             _gameBoard = new GameBoard(currentConfig);
             _gameCellViewModels = new GameCellViewModel[_gameBoard.Cols, _gameBoard.Rows];
             
-            // Start TODO
-            
             BoardHeight = Settings.CellSize.Height * _gameBoard.Cols;
             BoardWidth = Settings.CellSize.Width * _gameBoard.Rows;
-            
-            RaisePropertyChanged("BoardHeight");
-            RaisePropertyChanged("BoardWidth");
-
-            // End TODO
             
             for (int x = 0; x < _gameBoard.Cols; x++)
             {
@@ -82,9 +94,9 @@ namespace Minesweeper.ViewModels
             }
         }
 
-        public void Invalidate() => Canvas.Invalidate(_gameCellViewModels);
+        public void Invalidate() => Canvas.Draw(_gameCellViewModels);
         
-        public void HandleCellClick(Point point)
+        public void HandleCellClick(Point point, int mouseType)
         {
             if (_gameState == GameState.GameOver)
                 return;
@@ -102,10 +114,19 @@ namespace Minesweeper.ViewModels
             if (cell == null)
                 return;
 
+            if (mouseType == 0) OnLeftClick(cell);
+            else OnRightClick(cell);
+        }
+
+        private void OnLeftClick(Cell cell)
+        {
+            if (cell.IsFlagged)
+                return;
+            
             switch (cell.Type)
             {
                 case CellType.Free:
-                    _gameBoard.Reveal(x, y);
+                    _gameBoard.Reveal((int)cell.Coordinates.X, (int)cell.Coordinates.Y);
                     break;
                 case CellType.Neighboor:
                     cell.Reveal();
@@ -116,6 +137,24 @@ namespace Minesweeper.ViewModels
                     _eventAggregator.GetEvent<GameOverEvent>().Publish();
                     break;
             }
+        }
+
+        private void OnRightClick(Cell cell)
+        {
+            if (cell.IsRevealed) return;
+            
+            cell.SetFlag();
+
+            int count = currentConfig.MinesCount;
+            _gameBoard.ForEach(x =>
+            {
+                if (x.IsFlagged)
+                {
+                    count--;
+                }
+            });
+
+            MessageBox.Show(count.ToString()); // TODO
         }
     }
 }

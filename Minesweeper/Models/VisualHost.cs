@@ -19,7 +19,7 @@ namespace Minesweeper.Models
             _children = new VisualCollection(this);
         }
 
-        public void Invalidate(GameCellViewModel[,] gameCellController)
+        public void Draw(GameCellViewModel[,] gameCellController)
         {
             _children.Clear();
 

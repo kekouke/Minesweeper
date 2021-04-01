@@ -8,8 +8,7 @@ namespace Minesweeper
     {
         public static readonly Size CellSize = new Size(30, 30);
         
-        // TODO
-        public static GameConfiguration DefaultGameConfig 
+        public static readonly GameConfiguration DefaultGameConfig 
             = new GameConfigurationService().GetBeginnerConfig; 
     }
 }

@@ -10,6 +10,7 @@
       mc:Ignorable="d">
     <Grid>
         <ContentControl Content="{Binding Canvas}"
-                        MouseLeftButtonDown="Canvas_MouseLeftButtonDown"/>
+                        MouseLeftButtonDown="OnLeftMouseButtonClicked"
+                        MouseRightButtonDown="OnRightMouseButtonClicked"/>
     </Grid>
 </UserControl>
