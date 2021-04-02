@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Minesweeper.Events;
 using Prism.Events;
 using Prism.Mvvm;
 

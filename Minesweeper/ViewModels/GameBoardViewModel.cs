@@ -3,7 +3,6 @@ using System.Windows;
 using Minesweeper.Enums;
 using Minesweeper.Events;
 using Minesweeper.Models;
-using Minesweeper.Services;
 using Prism.Events;
 using Prism.Mvvm;
 
@@ -98,15 +97,9 @@ namespace Minesweeper.ViewModels
         
         public void HandleCellClick(Point point, int mouseType)
         {
-            if (_gameState == GameState.GameOver)
+            if (!CanCLick())
                 return;
 
-            if (_gameState == GameState.Initial)
-            {
-                _gameState = GameState.InProcess;
-                _eventAggregator.GetEvent<FirstCellClickEvent>().Publish();
-            }
-            
             var x = (int) Math.Floor(point.X / Settings.CellSize.Width);
             var y = (int) Math.Floor(point.Y / Settings.CellSize.Height);
             
@@ -114,8 +107,32 @@ namespace Minesweeper.ViewModels
             if (cell == null)
                 return;
 
-            if (mouseType == 0) OnLeftClick(cell);
-            else OnRightClick(cell);
+            CellClick(cell, mouseType);
+        }
+
+        private void CellClick(Cell cell, int mouseType)
+        {
+            ChangeGameState();
+
+            if (mouseType == 0)
+            {
+                OnLeftClick(cell);
+            }
+            else
+            {
+                OnRightClick(cell);
+            }
+        }
+
+        private void ChangeGameState()
+        {
+            switch (_gameState)
+            {
+                case GameState.Initial:
+                    _gameState = GameState.InProcess;
+                    _eventAggregator.GetEvent<FirstCellClickEvent>().Publish();
+                    break;
+            }
         }
 
         private void OnLeftClick(Cell cell)
@@ -127,16 +144,40 @@ namespace Minesweeper.ViewModels
             {
                 case CellType.Free:
                     _gameBoard.Reveal((int)cell.Coordinates.X, (int)cell.Coordinates.Y);
+                    CanWin();
                     break;
                 case CellType.Neighboor:
                     cell.Reveal();
+                    CanWin();
                     break;
                 case CellType.Mine:
                     _gameBoard.ForEach(c => c.Reveal());
                     _gameState = GameState.GameOver;
                     _eventAggregator.GetEvent<GameOverEvent>().Publish();
+                    Invalidate();
+                    MessageBox.Show("You're lost!!!");
                     break;
             }
+        }
+
+        private void CanWin()
+        {
+            int count = 0;
+            _gameBoard.ForEach(x =>
+            {
+                if (x.IsRevealed)
+                {
+                    count++;
+                }
+            });
+
+            if (currentConfig.Height * currentConfig.Weight - count == currentConfig.MinesCount)
+            {
+                MessageBox.Show("Congratulations! You're win!!!");
+                _eventAggregator.GetEvent<GameOverEvent>().Publish();
+                _gameState = GameState.GameOver;
+            }
+            
         }
 
         private void OnRightClick(Cell cell)
@@ -155,6 +196,11 @@ namespace Minesweeper.ViewModels
             });
 
             MessageBox.Show(count.ToString()); // TODO
+        }
+
+        private bool CanCLick()
+        {
+            return _gameState != GameState.GameOver;
         }
     }
 }
