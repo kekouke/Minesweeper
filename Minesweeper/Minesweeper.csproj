@@ -100,15 +100,25 @@
     <Compile Include="Services\ILeaderboardService.cs" />
     <Compile Include="Services\LeaderboardService.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\GameHeaderViewModel.cs" />
     <Compile Include="ViewModels\GameMenuViewModel.cs" />
+    <Compile Include="ViewModels\GameMinesViewModel.cs" />
     <Compile Include="ViewModels\TimerViewModel.cs" />
+    <Compile Include="Views\GameHeaderView.xaml.cs">
+      <DependentUpon>GameHeaderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GameMenuView.xaml.cs">
       <DependentUpon>GameMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameMinesView.xaml.cs">
+      <DependentUpon>GameMinesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TimerView.xaml.cs">
       <DependentUpon>TimerView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\GameBoardView.xaml" />
+    <Page Include="Views\GameHeaderView.xaml" />
+    <Page Include="Views\GameMinesView.xaml" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

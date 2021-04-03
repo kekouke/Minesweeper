@@ -2,7 +2,7 @@
 
 namespace Minesweeper.Events
 {
-    public class CellFlagEvent : PubSubEvent
+    public class CellFlagEvent : PubSubEvent<int>
     {
     }
 }

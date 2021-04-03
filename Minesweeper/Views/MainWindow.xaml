@@ -27,7 +27,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <local:TimerView/>
+            <local:GameHeaderView/>
 
             <local:GameBoardView Grid.Row="1"
                                  Grid.Column="1"

@@ -54,12 +54,13 @@ namespace Minesweeper.ViewModels
         public GameBoardViewModel(IEventAggregator eventAggregator, IDrawable visualHost)
         {
             eventAggregator.GetEvent<RestartGameEvent>().Subscribe(() => StartNewGame(currentConfig));
+            
             eventAggregator.GetEvent<ChangeGameConfigEvent>().Subscribe(StartNewGame);
 
             _eventAggregator = eventAggregator;
             Canvas = visualHost;
 
-            StartNewGame(Settings.DefaultGameConfig);
+            eventAggregator.GetEvent<ChangeGameConfigEvent>().Publish(Settings.DefaultGameConfig);
         }
 
         private void StartNewGame(GameConfiguration configuration)
@@ -70,7 +71,7 @@ namespace Minesweeper.ViewModels
             Invalidate();
 
             _gameState = GameState.Initial;
-
+            
             _eventAggregator.GetEvent<StartNewGameEvent>().Publish();
         }
 
@@ -195,7 +196,7 @@ namespace Minesweeper.ViewModels
                 }
             });
 
-            MessageBox.Show(count.ToString()); // TODO
+            _eventAggregator.GetEvent<CellFlagEvent>().Publish(count);
         }
 
         private bool CanCLick()
